@@ -1,0 +1,12 @@
+h1 {
+    text-align: center;
+}
+
+.main {
+    padding-left: 100px;
+    padding-right: 100px;
+    text-algn: left;
+    border: 10px solid blue;
+    font-size: 18px;
+    color: red;
+}

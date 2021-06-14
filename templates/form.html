@@ -1,0 +1,26 @@
+<head>
+    <title>Welcome Flask app</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+
+</head>
+<h1> This is the form page </h1>
+
+<body class="main">
+
+<div>
+    <p>Please enter your name.</p>
+    <form class="pure-form" method="POST" action="/form">
+        <input type="text" name="username" />
+        <button type="submit" class="pure-button pure-button-primary" value="Submit">Submit</button>
+    </form>
+</div>
+
+<div>
+    {% if name %}
+    Hi, Mr. {{ name }}.
+    {% endif %}
+</div>
+
+</body>
