@@ -2,7 +2,12 @@
     <title>Welcome Flask app</title>
     <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
 </head>
+
 <style>
+    body {
+      margin-left: 50px;
+    }
+
     .custom-restricted {
         height: 50px;
     }
@@ -22,10 +27,10 @@
                     <a href="/elasticsearch_static" class="pure-menu-link">Static search</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="/elasticsearch_dynamic" class="pure-menu-link">Search by variable</a>
+                    <a href="/elasticsearch_dynamic" class="pure-menu-link">Search by env variable</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="#" class="pure-menu-link">Search by service</a>
+                    <a href="/elasticsearch_by_service" class="pure-menu-link">Search by service</a>
                 </li>
             </ul>
         </li>

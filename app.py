@@ -109,5 +109,47 @@ def elasticsearch_3():
     return render_template("elasticsearch_dynamic.html", hits=hits, result=result)
 
 
+@app.route('/elasticsearch_by_service', methods=['GET', 'POST'])
+def elasticsearch_4():
+    es = Elasticsearch(['http://localhost:9200'])
+    tier = ''
+    variable = ''
+
+    if request.method == 'POST':
+        variable = request.form['variable']
+        tier = request.form['tier_options']
+    else:
+        return render_template("elasticsearch_by_service.html", hits=0, result=0)
+
+    search_query = {
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "regexp": {
+                "context.raw": {
+                  "value": ".*%s.*" % (tier)
+                }
+              }
+            },
+            {
+              "terms": {
+                "service.raw": [ "%s" % (variable) ]
+              }
+            }
+          ]
+        }
+      }
+    }
+
+    print(search_query)
+
+    result = es.search(index='invision-env', body=search_query)
+    for hit in result['hits']['hits']:
+        print("%(service)s - %(context)s: %(variable)s" % hit['_source'])
+    hits = result['hits']['total']['value']
+    return render_template("elasticsearch_by_service.html", hits=hits, result=result)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
