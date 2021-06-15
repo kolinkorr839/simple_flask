@@ -97,7 +97,7 @@ def elasticsearch_3():
     search_query = {
       "query": {
         "term": {
-          "variable.raw": "%s" %(variable)
+          "variable.simple": "%s" %(variable)
         }
       }
     }
