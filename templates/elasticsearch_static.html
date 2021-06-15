@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1> Result </h1>
+<p> Total hits: {{ hits }} </p>
+
+<!-- https://purecss.io/tables/#bordered-table -->
+<table class="pure-table pure-table-bordered">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Cluster</th>
+            <th>Variable</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for hit in result['hits']['hits'] %}
+        <tr>
+          <td>{{ hit['_source']['service'] }}</td>
+          <td>{{ hit['_source']['context'] }}</td>
+          <td>{{ hit['_source']['variable'] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

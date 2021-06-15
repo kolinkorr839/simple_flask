@@ -1,0 +1,38 @@
+<head>
+    <title>Welcome Flask app</title>
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+</head>
+<style>
+    .custom-restricted {
+        height: 50px;
+    }
+</style>
+
+<body>
+
+<div class="pure-menu pure-menu-horizontal custom-restricted">
+    <ul class="pure-menu-list">
+        <li class="pure-menu-item pure-menu-selected">
+            <a href="/blank" class="pure-menu-link">Home</a>
+        </li>
+        <li class="pure-menu-item pure-menu-has-children pure-menu-allow-hover">
+            <a href="#" id="menuLink1" class="pure-menu-link">Search</a>
+            <ul class="pure-menu-children">
+                <li class="pure-menu-item">
+                    <a href="/elasticsearch_static" class="pure-menu-link">Static search</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="/elasticsearch_dynamic" class="pure-menu-link">Search by variable</a>
+                </li>
+                <li class="pure-menu-item">
+                    <a href="#" class="pure-menu-link">Search by service</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+{% block content %}{% endblock %}
+
+</body>
+</html>

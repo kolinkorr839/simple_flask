@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1> S3 search </h1>
+<body>
+
+<div>
+    <p>Please enter a search variable. Sample: AUTH_API_MYSQL_PORT</p>
+    <form class="pure-form" method="POST" action="/elasticsearch_dynamic">
+        <input type="text" class="pure-input-1-2" name="variable" />
+        <button type="submit" class="pure-button pure-button-primary" value="Submit">Submit</button>
+    </form>
+</div>
+
+{% if hits != 0 %}
+<p> Total hits: {{ hits }} </p>
+
+<!-- https://purecss.io/tables/#bordered-table -->
+<table class="pure-table pure-table-bordered">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Cluster</th>
+            <th>Variable</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for hit in result['hits']['hits'] %}
+        <tr>
+          <td>{{ hit['_source']['service'] }}</td>
+          <td>{{ hit['_source']['context'] }}</td>
+          <td>{{ hit['_source']['variable'] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+</body>
