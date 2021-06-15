@@ -43,33 +43,27 @@ def bmi_calculator():
 
     return render_template("bmi.html", result=result)
 
-@app.route('/elasticsearch_simple')
-def elasticsearch_1():
-    es = Elasticsearch(['http://localhost:9200'])
-    search_query = {
-      "query": {
-        "term": {
-          "variable.raw": "AUTH_API_MYSQL_PORT"
-        }
-      }
-    }
-
-    result = es.search(index='invision-env', body=search_query)
-    for hit in result['hits']['hits']:
-        print("%(service)s - %(context)s: %(variable)s" % hit['_source'])
-    hits = result['hits']['total']['value']
-    return render_template("elasticsearch_simple.html", hits=hits, result=result)
-
 
 @app.route('/blank')
 def blank():
     return render_template('blank.html')
 
 
+@app.route('/elasticsearch_simple')
+def elasticsearch_1():
+    query = {
+      "query": {
+        "term": {
+          "variable.raw": "AUTH_API_MYSQL_PORT"
+        }
+      }
+    }
+    return base_elasticsearch(query, 'elasticsearch_simple.html')
+
+
 @app.route('/elasticsearch_static')
 def elasticsearch_2():
-    es = Elasticsearch(['http://localhost:9200'])
-    search_query = {
+    query = {
       "query": {
         "term": {
           "variable.raw": "AUTH_API_MYSQL_PORT"
@@ -77,24 +71,18 @@ def elasticsearch_2():
       }
     }
 
-    result = es.search(index='invision-env', body=search_query)
-    for hit in result['hits']['hits']:
-        print("%(service)s - %(context)s: %(variable)s" % hit['_source'])
-    hits = result['hits']['total']['value']
-    return render_template("elasticsearch_static.html", hits=hits, result=result)
+    return base_elasticsearch(query, 'elasticsearch_static.html')
 
 
 @app.route('/elasticsearch_dynamic', methods=['GET', 'POST'])
 def elasticsearch_3():
-    es = Elasticsearch(['http://localhost:9200'])
-
     variable = ''
     if request.method == 'POST':
         variable = request.form['variable']
     else:
         return render_template("elasticsearch_dynamic.html", hits=0, result=0)
 
-    search_query = {
+    query = {
       "query": {
         "term": {
           "variable.simple": "%s" %(variable)
@@ -102,26 +90,22 @@ def elasticsearch_3():
       }
     }
 
-    result = es.search(index='invision-env', body=search_query)
-    for hit in result['hits']['hits']:
-        print("%(service)s - %(context)s: %(variable)s" % hit['_source'])
-    hits = result['hits']['total']['value']
-    return render_template("elasticsearch_dynamic.html", hits=hits, result=result)
+    return base_elasticsearch(query, 'elasticsearch_dynamic.html')
 
 
 @app.route('/elasticsearch_by_service', methods=['GET', 'POST'])
 def elasticsearch_4():
-    es = Elasticsearch(['http://localhost:9200'])
     tier = ''
     variable = ''
 
     if request.method == 'POST':
         variable = request.form['variable']
-        tier = request.form['tier_options']
+        if 'tier_options' in request.form:
+            tier = request.form['tier_options']
     else:
         return render_template("elasticsearch_by_service.html", hits=0, result=0)
 
-    search_query = {
+    query = {
       "query": {
         "bool": {
           "must": [
@@ -142,13 +126,19 @@ def elasticsearch_4():
       }
     }
 
-    print(search_query)
+    return base_elasticsearch(query, 'elasticsearch_by_service.html')
 
-    result = es.search(index='invision-env', body=search_query)
+
+def base_elasticsearch(query, template):
+    es = Elasticsearch(['http://localhost:9200'])
+
+    print(query)
+    result = es.search(index='invision-env', body=query, size=20)
     for hit in result['hits']['hits']:
         print("%(service)s - %(context)s: %(variable)s" % hit['_source'])
+
     hits = result['hits']['total']['value']
-    return render_template("elasticsearch_by_service.html", hits=hits, result=result)
+    return render_template(template, hits=hits, result=result)
 
 
 if __name__ == '__main__':
