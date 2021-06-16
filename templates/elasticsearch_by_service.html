@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1> S3 search </h1>
+<body>
+
+<div>
+    <p>Please enter a search variable (service-based). Sample: teams-api</p>
+    <form class="pure-form" method="POST" action="/elasticsearch_by_service">
+        <input type="text" class="pure-input-1-4" name="variable" />
+
+        <label for="checkbox-radio-option-one" class="pure-radio">
+        <input type="radio" id="checkbox-radio-option-one" name="tier_options" value="test" /> testing</label>
+
+        <label for="checkbox-radio-option-two" class="pure-radio">
+        <input type="radio" id="checkbox-radio-option-two" name="tier_options" value="prev" /> preview</label>
+
+        <label for="checkbox-radio-option-three" class="pure-radio">
+        <input type="radio" id="checkbox-radio-option-three" name="tier_options" value="prod" /> prod</label>
+
+
+        <button type="submit" class="pure-button pure-button-primary" value="Submit">Submit</button>
+    </form>
+</div>
+
+{% if hits != 0 %}
+<p> Total hits: {{ hits }} </p>
+
+<!-- https://purecss.io/tables/#bordered-table -->
+<table class="pure-table pure-table-bordered">
+    <thead>
+        <tr>
+            <th>Service</th>
+            <th>Cluster</th>
+            <th>Variable</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for hit in result['hits']['hits'] %}
+        <tr>
+          <td>{{ hit['_source']['service'] }}</td>
+          <td>{{ hit['_source']['context'] }}</td>
+          <td>{{ hit['_source']['variable'] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+</body>
