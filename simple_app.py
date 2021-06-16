@@ -75,13 +75,13 @@ def elasticsearch_2():
     return base_elasticsearch(query, 'elasticsearch_static.html')
 
 
-@app.route('/elasticsearch_dynamic', methods=['GET', 'POST'])
+@app.route('/elasticsearch_by_envar', methods=['GET', 'POST'])
 def elasticsearch_3():
     variable = ''
     if request.method == 'POST':
         variable = request.form['variable']
     else:
-        return render_template("elasticsearch_dynamic.html", hits=0, result=0)
+        return render_template("elasticsearch_by_envar.html", hits=0, result=0)
 
     query = {
       "query": {
@@ -91,7 +91,7 @@ def elasticsearch_3():
       }
     }
 
-    return base_elasticsearch(query, 'elasticsearch_dynamic.html')
+    return base_elasticsearch(query, 'elasticsearch_by_envar.html')
 
 
 @app.route('/elasticsearch_by_service', methods=['GET', 'POST'])

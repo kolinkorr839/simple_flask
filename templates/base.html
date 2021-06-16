@@ -7,6 +7,11 @@
     body {
       background: url('static/success.jpeg');
       margin-left: 50px;
+      margin-right: 50px;
+    }
+
+    #header {
+        border-bottom: solid 1px black;
     }
 
     h1 {
@@ -20,7 +25,7 @@
 
 <body>
 
-<div class="pure-menu pure-menu-horizontal custom-restricted">
+<div class="pure-menu pure-menu-horizontal custom-restricted" id="header">
     <ul class="pure-menu-list">
         <li class="pure-menu-item pure-menu-selected">
             <a href="/blank" class="pure-menu-link">Home</a>
@@ -32,7 +37,7 @@
                     <a href="/elasticsearch_static" class="pure-menu-link">Static search</a>
                 </li>
                 <li class="pure-menu-item">
-                    <a href="/elasticsearch_dynamic" class="pure-menu-link">Search by env variable</a>
+                    <a href="/elasticsearch_by_envar" class="pure-menu-link">Search by envar</a>
                 </li>
                 <li class="pure-menu-item">
                     <a href="/elasticsearch_by_service" class="pure-menu-link">Search by service</a>
