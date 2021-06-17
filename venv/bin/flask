@@ -1,4 +1,4 @@
-#!/private/tmp/simple_flask/venv/bin/python3
+#!/Users/jcua/git/simple_flask/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

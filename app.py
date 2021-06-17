@@ -1,13 +1,41 @@
 #!/bin/python3
 
 from elasticsearch import Elasticsearch
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, g, url_for, redirect
+from flask_oidc import OpenIDConnect
+from okta import UsersClient
 
 app = Flask(__name__)
 
+# https://bit.ly/2TBcxPY
+app.config['OIDC_CLIENT_SECRETS'] = 'client_secrets.json'
+app.config['OIDC_COOKIE_SECURE'] = False
+app.config['OIDC_CALLBACK_ROUTE'] = '/oidc/callback'
+app.config['OIDC_SCOPES'] = ['openid', 'email', 'profile']
+app.config['SECRET_KEY'] = 'O2XF7t6gbx7kC6ps'
+oidc = OpenIDConnect(app)
+okta_client = UsersClient('https://dev-96937983.okta.com', '00ztbmTqSgBGnzcZn3xTt-w6ycmuctp01Z758mlkd7')
+
+@app.before_request
+def inject_user_into_each_request():
+    if oidc.user_loggedin:
+        g.user = okta_client.get_user(oidc.user_getfield('sub'))
+    else:
+        g.user = None
+
+@app.route('/login')
+@oidc.require_login
+def login():
+    return redirect(url_for('.blank'))
+
+@app.route('/logout')
+def logout():
+    oidc.logout()
+    # return redirect(url_for('.blank'))
 
 @app.route('/')
 @app.route('/blank')
+@oidc.require_login
 def blank():
     return render_template('blank.html')
 
