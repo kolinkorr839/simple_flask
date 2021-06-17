@@ -31,7 +31,7 @@ def login():
 @app.route('/logout')
 def logout():
     oidc.logout()
-    # return redirect(url_for('.blank'))
+    return redirect(url_for('.blank'))
 
 @app.route('/')
 @app.route('/blank')
