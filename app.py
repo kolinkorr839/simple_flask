@@ -25,7 +25,7 @@ def elasticsearch_1():
 
 
 @app.route('/elasticsearch_static')
-def elasticsearch_2():
+def elasticsearch_static():
     query = {
       "query": {
         "term": {
@@ -38,7 +38,7 @@ def elasticsearch_2():
 
 
 @app.route('/elasticsearch_by_envar', methods=['GET', 'POST'])
-def elasticsearch_3():
+def elasticsearch_by_envar_name():
     variable = ''
     if request.method == 'POST':
         variable = request.form['variable']
@@ -56,8 +56,44 @@ def elasticsearch_3():
     return base_elasticsearch(query, 'elasticsearch_by_envar.html')
 
 
+@app.route('/elasticsearch_by_value', methods=['GET', 'POST'])
+def elasticsearch_by_value():
+    tier = ''
+    variable = ''
+
+    if request.method == 'POST':
+        variable = request.form['variable']
+        if 'tier_options' in request.form:
+            tier = request.form['tier_options']
+    else:
+        return render_template("elasticsearch_by_value.html", hits=0, result=0)
+
+    query = {
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "regexp": {
+                "context.raw": {
+                  "value": ".*%s.*" % (tier)
+                }
+              }
+            },
+            {
+              "terms": {
+                "value.raw": [ "%s" % (variable) ]
+              }
+            }
+          ]
+        }
+      }
+    }
+
+    return base_elasticsearch(query, 'elasticsearch_by_value.html')
+
+
 @app.route('/elasticsearch_by_service', methods=['GET', 'POST'])
-def elasticsearch_4():
+def elasticsearch_by_service():
     tier = ''
     variable = ''
 
